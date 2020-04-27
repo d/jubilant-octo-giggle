@@ -4,3 +4,6 @@ dist: bionic
 os: linux
 arch:
   - arm64
+
+script:
+  - docker build .
