@@ -1,0 +1,6 @@
+language: minimal
+
+dist: bionic
+os: linux
+arch:
+  - arm64
