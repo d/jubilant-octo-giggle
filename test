@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -e -u -o pipefail
+set -x
+
+_main() {
+	has_en_utf8_locale
+}
+
+has_en_utf8_locale() {
+	locale -a | grep -i en_US.UTF8
+}
+
+_main "$@"

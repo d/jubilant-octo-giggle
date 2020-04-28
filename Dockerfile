@@ -1,4 +1,4 @@
-FROM debian:buster
+FROM debian:buster AS base
 RUN apt-get update -q
 RUN apt-get install -y \
 	openssh-server \
@@ -42,5 +42,10 @@ RUN apt-get install -y \
 	iproute2 \
 	sudo
 
-RUN apt-get install -y debconf
-RUN dpkg-reconfigure -fnoninteractive locales
+RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && locale-gen
+
+FROM base AS test
+COPY test /tmp
+RUN /tmp/test
+
+FROM base
