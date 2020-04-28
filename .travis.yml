@@ -11,4 +11,6 @@ cache:
 
 script:
   - docker build .
+  - if [ ! -d ~/gpdb.git ]; then git clone --bare https://github.com/greenplum-db/gpdb ~/gpdb.git; fi
   - git clone --bare --reference ~/gpdb.git https://github.com/greenplum-db/gpdb gpdb.git
+  - docker run --rm -ti --volume $PWD:/workspace:ro $(docker build -q .) /workspace/build
