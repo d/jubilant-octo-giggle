@@ -7,6 +7,10 @@ _main() {
 	git clone --share /workspace/gpdb.git gpdb
 	cd gpdb
 	./configure --enable-debug --enable-depend --disable-gpcloud --disable-orca CC="ccache gcc" CFLAGS='-O0 -fno-omit-frame-pointer'
+	nproc
+	uptime
+	make -j4 -l8
+	uptime
 }
 
 _main "$@"
