@@ -5,5 +5,10 @@ os: linux
 arch:
   - arm64
 
+cache:
+  directories:
+    - $HOME/gpdb.git
+
 script:
   - docker build .
+  - git clone --bare --reference ~/gpdb.git https://github.com/greenplum-db/gpdb gpdb.git

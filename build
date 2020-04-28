@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -e -u -o pipefail
+set -x
+
+_main() {
+	git clone --share /workspace/gpdb.git gpdb
+	cd gpdb
+	./configure --enable-debug --enable-depend --disable-gpcloud --disable-orca CFLAGS='-O0 -fno-omit-frame-pointer'
+}
+
+_main "$@"
