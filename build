@@ -11,6 +11,7 @@ _main() {
 	NCPU=$(nproc)
 	JOBS=$((NCPU * 3 / 2))
 	make -s -j"${NCPU}" -l"${JOBS}"
+	make -s install DESTDIR=/gpdb-binaries
 }
 
 _main "$@"
