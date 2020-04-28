@@ -7,10 +7,10 @@ _main() {
 	git clone --share /workspace/gpdb.git gpdb
 	cd gpdb
 	./configure --enable-debug --enable-depend --disable-gpcloud --disable-orca CC="ccache gcc" CFLAGS='-O0 -fno-omit-frame-pointer'
-	nproc
-	uptime
-	make -j4 -l8
-	uptime
+	# the LXD boxes in Travis seem to have 32 cores
+	NCPU=$(nproc)
+	JOBS=$((NCPU * 3 / 2))
+	make -s -j"${NCPU}" -l"${JOBS}"
 }
 
 _main "$@"
