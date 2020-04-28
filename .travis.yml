@@ -12,5 +12,5 @@ cache:
 script:
   - if [ ! -d ~/gpdb.git/objects ]; then git clone --bare https://github.com/greenplum-db/gpdb ~/gpdb.git; fi
   - docker build .
-  - git clone --bare --reference ~/gpdb.git https://github.com/greenplum-db/gpdb gpdb.git
+  - git clone --bare --reference ~/gpdb.git --dissociate https://github.com/greenplum-db/gpdb gpdb.git
   - docker run --rm -t --volume $PWD:/workspace:ro $(docker build -q .) /workspace/build
