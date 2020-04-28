@@ -5,5 +5,22 @@ os: linux
 arch:
   - arm64
 
+cache:
+  directories:
+    - $HOME/gpdb.git
+    - $HOME/.ccache
+
+before_script:
+  - if [ ! -d ~/gpdb.git/objects ]; then git clone --bare https://github.com/greenplum-db/gpdb ~/gpdb.git; fi
+  - mkdir gpdb-binaries
+
 script:
   - docker build .
+  - BASE_IMG_W_DEV_DEPS=$(docker build -q .)
+  - git clone --bare --reference ~/gpdb.git --dissociate https://github.com/greenplum-db/gpdb gpdb.git
+  - docker run --rm -t --volume $PWD:/workspace:ro --volume $HOME/.ccache:/ccache:rw --env CCACHE_DIR=/ccache --volume $PWD/gpdb-binaries:/gpdb-binaries $(docker build -q .) /workspace/build
+  - docker build --build-arg base_image=${BASE_IMG_W_DEV_DEPS} -f Dockerfile.install .
+
+before_cache:
+  - git -C gpdb.git push --force ~/gpdb.git HEAD:travis/head
+  - git -c gc.autoDetach=false -C ~/gpdb.git gc --auto

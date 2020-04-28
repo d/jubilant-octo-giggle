@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -e -u -o pipefail
+set -x
+
+_main() {
+	git clone --share /workspace/gpdb.git gpdb
+	cd gpdb
+	./configure --enable-debug --enable-depend --disable-gpcloud --disable-orca CC="ccache gcc" CFLAGS='-O0 -fno-omit-frame-pointer'
+	# the LXD boxes in Travis seem to have 32 cores
+	NCPU=$(nproc)
+	JOBS=$((NCPU * 3 / 2))
+	make -s -j"${NCPU}" -l"${JOBS}"
+	make -s install DESTDIR=/gpdb-binaries
+}
+
+_main "$@"
