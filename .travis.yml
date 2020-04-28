@@ -8,6 +8,7 @@ arch:
 cache:
   directories:
     - $HOME/gpdb.git
+    - $HOME/.ccache
 
 before_script:
   - if [ ! -d ~/gpdb.git/objects ]; then git clone --bare https://github.com/greenplum-db/gpdb ~/gpdb.git; fi
@@ -15,7 +16,7 @@ before_script:
 script:
   - docker build .
   - git clone --bare --reference ~/gpdb.git --dissociate https://github.com/greenplum-db/gpdb gpdb.git
-  - docker run --rm -t --volume $PWD:/workspace:ro $(docker build -q .) /workspace/build
+  - docker run --rm -t --volume $PWD:/workspace:ro --volume $HOME/.ccache:/ccache:rw --env CCACHE_DIR=/ccache $(docker build -q .) /workspace/build
 
 before_cache:
   - git -C gpdb.git push --force ~/gpdb.git HEAD:travis/head
