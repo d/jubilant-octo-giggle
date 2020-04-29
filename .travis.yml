@@ -15,6 +15,7 @@ before_script:
   - mkdir gpdb-binaries
 
 script:
+  - export DOCKER_BUILDKIT=1
   - docker build .
   - BASE_IMG_W_DEV_DEPS=$(docker build -q .)
   - git clone --bare --reference ~/gpdb.git --dissociate https://github.com/greenplum-db/gpdb gpdb.git
