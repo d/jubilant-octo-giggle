@@ -2,3 +2,18 @@ ARG base_image
 
 FROM ${base_image}
 COPY gpdb-binaries/ /
+
+RUN adduser --uid 1000 gpadmin
+USER gpadmin
+RUN pip install --user \
+	psutil \
+	lockfile \
+	epydoc
+
+RUN ssh-keygen -N '' -f ~/.ssh/id_rsa && \
+	cp ~/.ssh/id_rsa.pub ~/.ssh/authorized_keys
+RUN echo 'source /usr/local/gpdb/greenplum_path.sh' >> ~/.bashrc
+
+USER root
+RUN mkdir /run/sshd
+CMD ["/usr/sbin/sshd", "-D"]

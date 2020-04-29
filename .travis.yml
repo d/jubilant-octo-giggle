@@ -20,6 +20,8 @@ script:
   - git clone --bare --reference ~/gpdb.git --dissociate https://github.com/greenplum-db/gpdb gpdb.git
   - docker run --rm -t --volume $PWD:/workspace:ro --volume $HOME/.ccache:/ccache:rw --env CCACHE_DIR=/ccache --volume $PWD/gpdb-binaries:/gpdb-binaries $(docker build -q .) /workspace/build
   - docker build --build-arg base_image=${BASE_IMG_W_DEV_DEPS} -f Dockerfile.install .
+  - DEPLOY_IMG=$(docker build -q --build-arg base_image=${BASE_IMG_W_DEV_DEPS} -f Dockerfile.install .)
+  - env IMAGE=${DEPLOY_IMG} docker-compose up -d && docker-compose ps
 
 before_cache:
   - git -C gpdb.git push --force ~/gpdb.git HEAD:travis/head

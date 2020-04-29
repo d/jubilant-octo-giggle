@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  mdw:
+    image: ${IMAGE}
+  smdw:
+    image: ${IMAGE}
+  sdw1:
+    image: ${IMAGE}
+  sdw2:
+    image: ${IMAGE}
